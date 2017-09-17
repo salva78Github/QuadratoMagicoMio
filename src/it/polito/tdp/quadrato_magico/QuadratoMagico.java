@@ -16,7 +16,7 @@ public class QuadratoMagico {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		QuadratoMagico qm = new QuadratoMagico(4);
+		QuadratoMagico qm = new QuadratoMagico(3);
 
 		int[][] quadrato = qm.risolvi();
 		qm.stampaSoluzione(quadrato);
@@ -28,7 +28,7 @@ public class QuadratoMagico {
 		// soluzione madre di livello 0
 		int[][] quadratoParziale = new int[size][size];
 		int[][] quadratoBest = new int[size][size];
-		scegli(quadratoParziale, 1, quadratoBest);
+		scegli(quadratoParziale, 0, quadratoBest);
 
 	
 		return quadratoBest;
@@ -40,7 +40,7 @@ public class QuadratoMagico {
 		// livello = size^2 e somma colonne, righe e diagonali = numero magico
 		// salva in quadrato best
 		// stampa soluzione
-		if (livello == (size*size)+1) {
+		if (livello == (size*size)) {
 			if (sommeRCDMagiche(quadratoParziale)) {
 				valorizzaEStampaSoluzione(quadratoParziale, quadratoBest);
 			}
@@ -59,11 +59,11 @@ public class QuadratoMagico {
 						//System.out.println("<i - livello> " + numero + " - " + livello);
 						
 						// prova a mettere i nel quadrato
-						quadratoParziale[(livello-1) / (size)][((livello-1) % (size))] = numero;
+						quadratoParziale[(livello) / (size)][((livello) % (size))] = numero;
 						// e delegare la ricerca al livello successivo
 						scegli(quadratoParziale, livello + 1, quadratoBest);
 						// poi rimetti le cose a posto (togli i)
-						quadratoParziale[(livello-1) / (size)][((livello-1) % (size))] = 0;
+						quadratoParziale[(livello) / (size)][((livello) % (size))] = 0;
 					}
 				}
 			}
