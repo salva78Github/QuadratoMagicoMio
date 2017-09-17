@@ -1,9 +1,14 @@
 package it.polito.tdp.quadrato_magico;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class QuadratoMagico {
 
 	private int magicNumber;
 	private int size;
+	List<int[][]> solutions = null;
+
 
 	/**
 	 * @param quadrato
@@ -12,37 +17,48 @@ public class QuadratoMagico {
 	public QuadratoMagico(int size) {
 		this.size = size;
 		this.magicNumber = (size * ((size * size) + 1)) / 2;
+
 	}
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		QuadratoMagico qm = new QuadratoMagico(3);
 
-		int[][] quadrato = qm.risolvi();
-		qm.stampaSoluzione(quadrato);
+		qm.risolvi();
 
 	}
 
-	private int[][] risolvi() {
+	private List<int[][]> risolvi() {
+		solutions = new ArrayList<int [][]>();
 
 		// soluzione madre di livello 0
 		int[][] quadratoParziale = new int[size][size];
-		int[][] quadratoBest = new int[size][size];
-		scegli(quadratoParziale, 0, quadratoBest);
+		scegli(quadratoParziale, 0);
+
+		for(int [][] quadrato : solutions){
+			stampaSoluzione(quadrato);
+		}
 
 	
-		return quadratoBest;
+		return solutions;
 
 	}
 
-	private void scegli(int[][] quadratoParziale, int livello, int[][] quadratoBest) {
+	private void scegli(int[][] quadratoParziale, int livello) {
 
 		// livello = size^2 e somma colonne, righe e diagonali = numero magico
 		// salva in quadrato best
 		// stampa soluzione
 		if (livello == (size*size)) {
 			if (sommeRCDMagiche(quadratoParziale)) {
-				valorizzaEStampaSoluzione(quadratoParziale, quadratoBest);
+				int[][] solution = new int [size][size];
+				for(int i = 0; i< size; i++){
+					for(int j = 0; j< size; j++){
+						solution [i][j] = quadratoParziale[i][j];
+					}							
+				}
+//				stampaSoluzione(solution);
+				solutions.add(solution);
 			}
 		}
 		else {
@@ -61,7 +77,7 @@ public class QuadratoMagico {
 						// prova a mettere i nel quadrato
 						quadratoParziale[(livello) / (size)][((livello) % (size))] = numero;
 						// e delegare la ricerca al livello successivo
-						scegli(quadratoParziale, livello + 1, quadratoBest);
+						scegli(quadratoParziale, livello + 1);
 						// poi rimetti le cose a posto (togli i)
 						quadratoParziale[(livello) / (size)][((livello) % (size))] = 0;
 					}
@@ -71,20 +87,10 @@ public class QuadratoMagico {
 
 	}
 
-	private void valorizzaEStampaSoluzione(int[][] quadratoParziale, int[][] quadratoBest) {
-		for (int i = 0; i < size; i++) {
-			for (int j = 0; j < size; j++) {
-				quadratoBest[i][j] = quadratoParziale[i][j];
-		//		System.out.println(quadratoBest[i][j] + "\t");
-			}
-		//	System.out.println("\n");
-
-		}
-
-	}
 
 	private void stampaSoluzione(int[][] quadrato) {
 		StringBuffer sb;
+		System.out.println("*********************");
 		for (int i = 0; i < size; i++) {
 			sb = new StringBuffer();
 			for (int j = 0; j < size; j++) {
